@@ -18,6 +18,10 @@ public class BookingGuest {
 		return contactPhone;
 	}
 	
+	public void setBookingId(Integer bookingId) {
+		this.bookingId = bookingId;
+	}
+	
 	public void setBookingId(Booking booking) {
 		bookingId = booking.getId();
 	}

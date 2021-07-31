@@ -281,24 +281,6 @@ ENGINE = InnoDB;
 USE `utopia` ;
 
 
--- -----------------------------------------------------
--- Table `utopia`.`flight_seats`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `utopia`.`flight_seats` (
-  `flight_id` INT UNSIGNED NOT NULL,
-  PRIMARY KEY (`flight_id`),
-  `first` INT UNSIGNED NOT NULL,
-  `business` INT UNSIGNED NOT NULL,
-  `economy` INT UNSIGNED NOT NULL,
-  CONSTRAINT `fk_flight_flight_seats1`
-    FOREIGN KEY (`flight_id`)
-    REFERENCES `utopia`.`flight` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-USE `utopia` ;
-
 
 -- -----------------------------------------------------
 -- Placeholder table for view `utopia`.`flight_status`

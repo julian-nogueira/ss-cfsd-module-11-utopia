@@ -13,8 +13,16 @@ public class BookingAgent {
 		return agentId;
 	}
 	
+	public void setBookingId(Integer bookingId) {
+		this.bookingId = bookingId;
+	}
+	
 	public void setBookingId(Booking booking) {
 		bookingId = booking.getId();
+	}
+	
+	public void setAgentId(Integer agentId) {
+		this.agentId = agentId;
 	}
 	
 	public void setAgentId(User user) {

@@ -17,6 +17,10 @@ public class Airplane {
 		this.id = id;
 	}
 	
+	public void setTypeId(Integer typeId) {
+		this.typeId = typeId;
+	}
+	
 	public void setTypeId(AirplaneType airplaneType) {
 		typeId = airplaneType.getId();
 	}

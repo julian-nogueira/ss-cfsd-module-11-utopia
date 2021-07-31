@@ -4,7 +4,7 @@ public class BookingPayment {
 
 	private Integer bookingId = null;
 	private String stripeId = null;
-	private Byte refunded = null;
+	private Boolean refunded = null;
 	
 	public Integer getBookingId() {
 		return bookingId;
@@ -14,8 +14,12 @@ public class BookingPayment {
 		return stripeId;
 	}
 	
-	public Byte getRefunded() {
+	public Boolean getRefunded() {
 		return refunded;
+	}
+	
+	public void setBookingId(Integer bookingId) {
+		this.bookingId = bookingId;
 	}
 	
 	public void setBookingId(Booking booking) {
@@ -26,7 +30,7 @@ public class BookingPayment {
 		this.stripeId = stripeId;
 	}
 	
-	public void setRefunded(Byte refunded) {
+	public void setRefunded(Boolean refunded) {
 		this.refunded = refunded;
 	}
 }

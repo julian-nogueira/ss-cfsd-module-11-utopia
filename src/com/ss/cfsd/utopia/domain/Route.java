@@ -22,8 +22,16 @@ public class Route {
 		this.id = id;
 	}
 	
+	public void setOriginId(String originId) {
+		this.originId = originId;
+	}
+	
 	public void setOriginId(Airport airport) {
 		originId = airport.getIataId();
+	}
+	
+	public void setDestinationId(String destinationId) {
+		this.destinationId = destinationId;
 	}
 	
 	public void setDestinationId(Airport airport) {

@@ -39,8 +39,16 @@ public class Flight {
 		this.id = id;
 	}
 	
+	public void setRouteId(Integer routeId) {
+		this.routeId = routeId;
+	}
+	
 	public void setRouteId(Route route) {
 		routeId = route.getId();
+	}
+	
+	public void setAirplaneId(Integer airplaneId) {
+		this.airplaneId = airplaneId;
 	}
 	
 	public void setAirplaneId(Airplane airplane) {
