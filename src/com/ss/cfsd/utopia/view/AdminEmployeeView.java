@@ -2,17 +2,24 @@ package com.ss.cfsd.utopia.view;
 
 public class AdminEmployeeView extends BaseView {
 
-	private String header1 = ""
+	private String headerMain = ""
 			+ "\n========== Administrator: Employee =================="
 			+ "\n";
+	private String headerReadEmployee = ""
+			+ "\n========== Administrator: Read Employee ============="
+			+ "\n";
 	
-	private String[] header1Options = {optionAdd, optionUpdate, optionDelete, optionRead, optionReturn};
+	private String[] headerMainOptions = {optionAdd, optionUpdate, optionDelete, optionRead, optionReturn};
 
-	public String getHeader1() {
-		return header1;
+	public String getHeaderMain() {
+		return headerMain;
+	}
+	
+	public String getHeaderReadEmployee() {
+		return headerReadEmployee;
 	}
 
-	public String[] getHeader1Options() {
-		return header1Options;
+	public String[] getHeaderMainOptions() {
+		return headerMainOptions;
 	}
 }

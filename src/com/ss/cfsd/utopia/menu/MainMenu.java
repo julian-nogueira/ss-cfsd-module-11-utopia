@@ -18,8 +18,8 @@ public class MainMenu extends BaseMenu {
 		
 		try {
 			while(true) {
-				optionNumber = runMenu(mainView.getHeader1(), mainView.getHeader1Options(), Boolean.TRUE);
-				option = mainView.getHeader1Options()[optionNumber];
+				optionNumber = runMenu(mainView.getHeaderMain(), mainView.getHeaderMainOptions(), Boolean.TRUE);
+				option = mainView.getHeaderMainOptions()[optionNumber];
 				
 				if(mainView.getOptionQuit().equals(option)) {
 					return;

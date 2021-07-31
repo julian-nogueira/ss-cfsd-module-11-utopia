@@ -2,7 +2,7 @@ package com.ss.cfsd.utopia.view;
 
 public class MainView extends BaseView {
 
-	private String header1 = ""
+	private String headerMain = ""
 			+ "\n====================================================="
 			+ "\n================== Utopia Airlines =================="
 			+ "\n====================================================="
@@ -12,10 +12,10 @@ public class MainView extends BaseView {
 	private String optionAdmin = "Administrator";
 	private String optionTraveler = "Traveler";
 	
-	private String[] header1Options = {optionEmployee, optionAdmin, optionTraveler, optionQuit};
+	private String[] headerMainOptions = {optionEmployee, optionAdmin, optionTraveler, optionQuit};
 
-	public String getHeader1() {
-		return header1;
+	public String getHeaderMain() {
+		return headerMain;
 	}
 
 	public String getOptionEmployee() {
@@ -30,7 +30,7 @@ public class MainView extends BaseView {
 		return optionTraveler;
 	}
 
-	public String[] getHeader1Options() {
-		return header1Options;
+	public String[] getHeaderMainOptions() {
+		return headerMainOptions;
 	}
 }

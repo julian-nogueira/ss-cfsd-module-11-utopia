@@ -26,8 +26,8 @@ public class AdminMenu extends BaseMenu {
 		
 		try {
 			while(true) {
-				optionNumber = runMenu(adminMainView.getHeader1(), adminMainView.getHeader1Options(), Boolean.TRUE);
-				option = adminMainView.getHeader1Options()[optionNumber];
+				optionNumber = runMenu(adminMainView.getHeaderMain(), adminMainView.getHeaderMainOptions(), Boolean.TRUE);
+				option = adminMainView.getHeaderMainOptions()[optionNumber];
 				
 				if(adminMainView.getOptionReturn().equals(option)) {
 					return;

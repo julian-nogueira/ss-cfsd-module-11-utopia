@@ -25,6 +25,10 @@ public class RouteDAO extends BaseDAO<Route> {
 		return read("SELECT * FROM route;", new Object[] {});
 	}
 	
+	public List<Route> readRouteById(Integer id) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM route WHERE id = ?;", new Object[] {id});
+	}
+	
 	// Update.
 	public void updateRoute(Route route) throws SQLException, ClassNotFoundException {
 		save("UPDATE route SET origin_id = ?, destination_id = ? WHERE id = ?;",

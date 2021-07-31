@@ -37,7 +37,7 @@ VALUES
     ('ITO', 'Hilo'),
     ('HNL', 'Honolulu'),
     ('OGG', 'Kahului'),
-    ('KOA', 'Kailua'),
+    ('KOA', 'Kalaoa'),
     ('LIH', 'Lihue');
 
 

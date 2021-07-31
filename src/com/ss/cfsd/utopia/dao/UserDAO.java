@@ -26,6 +26,16 @@ public class UserDAO extends BaseDAO<User> {
 		return read("SELECT * FROM user;", new Object[] {});
 	}
 	
+	public List<User> readUserWhereRoleIdEqualsTravelerId() throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM user WHERE role_id ="
+				+ " (SELECT id FROM user_role WHERE name='Traveler');", new Object[] {});
+	}
+	
+	public List<User> readUserWhereRoleIdEqualsEmployeeId() throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM user WHERE role_id ="
+				+ " (SELECT id FROM user_role WHERE name='Employee');", new Object[] {});
+	}
+	
 	// Update.
 	public void updateUser(User user) throws SQLException, ClassNotFoundException {
 		save("UPDATE user SET role_id = ?, given_name = ?, family_name = ?, username = ?, email = ?, password = ?, phone = ? WHERE id = ?;",

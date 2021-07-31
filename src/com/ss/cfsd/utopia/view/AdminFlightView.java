@@ -2,17 +2,24 @@ package com.ss.cfsd.utopia.view;
 
 public class AdminFlightView extends BaseView {
 
-	private String header1 = ""
+	private String headerMain = ""
 			+ "\n========== Administrator: Flight ===================="
 			+ "\n";
+	private String headerReadFlight = ""
+			+ "\n========== Administrator: Read Flight ==============="
+			+ "\n";
 	
-	private String[] header1Options = {optionAdd, optionUpdate, optionDelete, optionRead, optionReturn};
+	private String[] headerMainOptions = {optionAdd, optionUpdate, optionDelete, optionRead, optionReturn};
 
-	public String getHeader1() {
-		return header1;
+	public String getHeaderMain() {
+		return headerMain;
+	}
+	
+	public String getHeaderReadFlight() {
+		return headerReadFlight;
 	}
 
-	public String[] getHeader1Options() {
-		return header1Options;
+	public String[] getHeaderMainOptions() {
+		return headerMainOptions;
 	}
 }

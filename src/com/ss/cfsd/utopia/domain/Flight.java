@@ -10,6 +10,7 @@ public class Flight {
 	private Timestamp departureTime = null;
 	private Integer reservedSeats = null;
 	private Float seatPrice = null;
+	private Route route = null;
 	
 	public Integer getId() {
 		return id;
@@ -33,6 +34,10 @@ public class Flight {
 	
 	public Float getSeatPrice() {
 		return seatPrice;
+	}
+	
+	public Route getRoute() {
+		return route;
 	}
 
 	public void setId(Integer id) {
@@ -65,5 +70,9 @@ public class Flight {
 
 	public void setSeatPrice(Float seatPrice) {
 		this.seatPrice = seatPrice;
+	}
+	
+	public void setRoute(Route route) {
+		this.route = route;
 	}
 }
