@@ -53,4 +53,38 @@ public class AdminUpdateService {
 			}
 		}
 	}
+	
+	public void updateAirport(Airport airport) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			AirportDAO airportDAO = new AirportDAO(conn);
+			airportDAO.updateAirport(airport);
+			conn.commit();
+			return;
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
+	
+	public void updateUser(User user) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			UserDAO userDAO = new UserDAO(conn);
+			userDAO.updateUser(user);
+			conn.commit();
+			return;
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
 }

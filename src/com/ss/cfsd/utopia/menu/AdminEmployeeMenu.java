@@ -4,6 +4,7 @@ import com.ss.cfsd.utopia.domain.User;
 import com.ss.cfsd.utopia.service.AdminCreateService;
 import com.ss.cfsd.utopia.service.AdminDeleteService;
 import com.ss.cfsd.utopia.service.AdminReadService;
+import com.ss.cfsd.utopia.service.AdminUpdateService;
 import com.ss.cfsd.utopia.view.AdminEmployeeView;
 
 import java.sql.SQLException;
@@ -13,14 +14,16 @@ public class AdminEmployeeMenu extends BaseMenu {
 
 	private AdminEmployeeView adminEmployeeView = null;
 	private AdminCreateService adminCreateService = null;
-	private AdminDeleteService adminDeleteService = null;
 	private AdminReadService adminReadService = null;
+	private AdminUpdateService adminUpdateService = null;
+	private AdminDeleteService adminDeleteService = null;
 	
 	public AdminEmployeeMenu() {
 		adminEmployeeView = new AdminEmployeeView();
 		adminCreateService = new AdminCreateService();
-		adminDeleteService = new AdminDeleteService();
 		adminReadService = new AdminReadService();
+		adminUpdateService = new AdminUpdateService();
+		adminDeleteService = new AdminDeleteService();
 	}
 	
 	public void runAdminEmployeeMenu() {
@@ -37,7 +40,7 @@ public class AdminEmployeeMenu extends BaseMenu {
 				} else if(adminEmployeeView.getOptionAdd().equals(option)) {
 					runAdminCreateEmployee();
 				} else if(adminEmployeeView.getOptionUpdate().equals(option)) {
-					//
+					runAdminUpdateEmployee();
 				} else if(adminEmployeeView.getOptionDelete().equals(option)) {
 					runAdminDeleteEmployee();
 				} else if(adminEmployeeView.getOptionRead().equals(option)) {
@@ -81,6 +84,71 @@ public class AdminEmployeeMenu extends BaseMenu {
 		adminCreateService.createUserWhereRoleIdEqualsEmployeeId(user);
 		
 		System.out.println(adminEmployeeView.getAlertSuccessfulCreate());
+		System.out.println(trailingNewLine);
+	}
+	
+	public void runAdminUpdateEmployee() throws SQLException {
+		User targetUser = null;
+		StringBuilder spacing = new StringBuilder("  ");
+		String givenName = null;
+		String familyName = null;
+		String username = null;
+		String email = null;
+		String password = null;
+		String phone = null;
+		Integer optionNumber = null;
+		List<User> userList = adminReadService.readEmployee();
+		String[] userOptions = new String[userList.size() + 1];
+		
+		System.out.println(adminEmployeeView.getHeaderUpdateEmployee());
+	
+		// Get the user options.
+		for(int i = 0; i < userList.size(); i++) {
+			if(i % 9 == 0) { spacing.append(" "); }
+			User user = userList.get(i);
+			StringBuilder userOption = new StringBuilder();
+			userOption.append("Given Name: " + user.getGivenName());
+			userOption.append("\n" + spacing + "Family Name: " + user.getFamilyName());
+			userOption.append("\n" + spacing + "Username: " + user.getUsername());
+			userOption.append("\n" + spacing + "Email: " + user.getEmail());
+			userOption.append("\n" + spacing + "Password: " + user.getPassword());
+			userOption.append("\n" + spacing + "Phone: " + user.getPhone());
+			userOption.append("\n");
+			userOptions[i] = userOption.toString();
+		}
+		userOptions[userList.size()] = adminEmployeeView.getOptionReturn();
+		
+		optionNumber = runMenu(adminEmployeeView.getPromptSelectEmployeeToUpdate(), userOptions, Boolean.FALSE);
+		if(adminEmployeeView.getOptionReturn().equals(userOptions[optionNumber])) {
+			System.out.println(trailingNewLine);
+			return;
+		}
+		targetUser = userList.get(optionNumber);
+		
+		// Prompt the user for pertinent information.
+		givenName = getDataOrNA("", adminEmployeeView.getPromptEnterGivenNameOrNA());
+		familyName = getDataOrNA("", adminEmployeeView.getPromptEnterFamilyNameOrNA());
+		username = getDataOrNA("", adminEmployeeView.getPromptEnterUsernameOrNA());
+		email = getDataOrNA("", adminEmployeeView.getPromptEnterEmailOrNA());
+		password = getDataOrNA("", adminEmployeeView.getPromptEnterPasswordOrNA());
+		phone = getDataOrNA("", adminEmployeeView.getPromptEnterPhoneOrNA());
+		
+		if(givenName != null) { targetUser.setGivenName(givenName); }
+		if(familyName != null) { targetUser.setFamilyName(familyName); }
+		if(username != null) { targetUser.setUsername(username); }
+		if(email != null) { targetUser.setEmail(email); }
+		if(password != null) { targetUser.setPassword(password); }
+		if(phone != null) { targetUser.setPhone(phone); }
+		
+		if(givenName == null && familyName == null && username == null && email == null && password == null && phone == null) {
+			System.out.println(trailingNewLine);
+			return;
+		} else {
+			// Update the user.
+			adminUpdateService.updateUser(targetUser);
+		}
+		
+		System.out.println(adminEmployeeView.getAlertSuccessfulUpdate());
 		System.out.println(trailingNewLine);
 	}
 	

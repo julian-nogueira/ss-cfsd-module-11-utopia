@@ -4,6 +4,7 @@ import com.ss.cfsd.utopia.domain.User;
 import com.ss.cfsd.utopia.service.AdminCreateService;
 import com.ss.cfsd.utopia.service.AdminDeleteService;
 import com.ss.cfsd.utopia.service.AdminReadService;
+import com.ss.cfsd.utopia.service.AdminUpdateService;
 import com.ss.cfsd.utopia.view.AdminTravelerView;
 
 import java.sql.SQLException;
@@ -13,14 +14,16 @@ public class AdminTravelerMenu extends BaseMenu {
 
 	private AdminTravelerView adminTravelerView = null;
 	private AdminCreateService adminCreateService = null;
-	private AdminDeleteService adminDeleteService = null;
 	private AdminReadService adminReadService = null;
+	private AdminUpdateService adminUpdateService = null;
+	private AdminDeleteService adminDeleteService = null;
 	
 	public AdminTravelerMenu() {
 		adminTravelerView = new AdminTravelerView();
 		adminCreateService = new AdminCreateService();
-		adminDeleteService = new AdminDeleteService();
 		adminReadService = new AdminReadService();
+		adminUpdateService = new AdminUpdateService();
+		adminDeleteService = new AdminDeleteService();
 	}
 	
 	public void runAdminTravelerMenu() {
@@ -37,7 +40,7 @@ public class AdminTravelerMenu extends BaseMenu {
 				} else if(adminTravelerView.getOptionAdd().equals(option)) {
 					runAdminCreateTraveler();
 				} else if(adminTravelerView.getOptionUpdate().equals(option)) {
-					//
+					runAdminUpdateTraveler();
 				} else if(adminTravelerView.getOptionDelete().equals(option)) {
 					runAdminDeleteTraveler();
 				} else if(adminTravelerView.getOptionRead().equals(option)) {
@@ -81,6 +84,71 @@ public class AdminTravelerMenu extends BaseMenu {
 		adminCreateService.createUserWhereRoleIdEqualsTravelerId(user);
 		
 		System.out.println(adminTravelerView.getAlertSuccessfulCreate());
+		System.out.println(trailingNewLine);
+	}
+	
+	public void runAdminUpdateTraveler() throws SQLException {
+		User targetUser = null;
+		StringBuilder spacing = new StringBuilder("  ");
+		String givenName = null;
+		String familyName = null;
+		String username = null;
+		String email = null;
+		String password = null;
+		String phone = null;
+		Integer optionNumber = null;
+		List<User> userList = adminReadService.readTraveler();
+		String[] userOptions = new String[userList.size() + 1];
+		
+		System.out.println(adminTravelerView.getHeaderUpdateTraveler());
+	
+		// Get the user options.
+		for(int i = 0; i < userList.size(); i++) {
+			if(i % 9 == 0) { spacing.append(" "); }
+			User user = userList.get(i);
+			StringBuilder userOption = new StringBuilder();
+			userOption.append("Given Name: " + user.getGivenName());
+			userOption.append("\n" + spacing + "Family Name: " + user.getFamilyName());
+			userOption.append("\n" + spacing + "Username: " + user.getUsername());
+			userOption.append("\n" + spacing + "Email: " + user.getEmail());
+			userOption.append("\n" + spacing + "Password: " + user.getPassword());
+			userOption.append("\n" + spacing + "Phone: " + user.getPhone());
+			userOption.append("\n");
+			userOptions[i] = userOption.toString();
+		}
+		userOptions[userList.size()] = adminTravelerView.getOptionReturn();
+		
+		optionNumber = runMenu(adminTravelerView.getPromptSelectTravelerToUpdate(), userOptions, Boolean.FALSE);
+		if(adminTravelerView.getOptionReturn().equals(userOptions[optionNumber])) {
+			System.out.println(trailingNewLine);
+			return;
+		}
+		targetUser = userList.get(optionNumber);
+		
+		// Prompt the user for pertinent information.
+		givenName = getDataOrNA("", adminTravelerView.getPromptEnterGivenNameOrNA());
+		familyName = getDataOrNA("", adminTravelerView.getPromptEnterFamilyNameOrNA());
+		username = getDataOrNA("", adminTravelerView.getPromptEnterUsernameOrNA());
+		email = getDataOrNA("", adminTravelerView.getPromptEnterEmailOrNA());
+		password = getDataOrNA("", adminTravelerView.getPromptEnterPasswordOrNA());
+		phone = getDataOrNA("", adminTravelerView.getPromptEnterPhoneOrNA());
+		
+		if(givenName != null) { targetUser.setGivenName(givenName); }
+		if(familyName != null) { targetUser.setFamilyName(familyName); }
+		if(username != null) { targetUser.setUsername(username); }
+		if(email != null) { targetUser.setEmail(email); }
+		if(password != null) { targetUser.setPassword(password); }
+		if(phone != null) { targetUser.setPhone(phone); }
+		
+		if(givenName == null && familyName == null && username == null && email == null && password == null && phone == null) {
+			System.out.println(trailingNewLine);
+			return;
+		} else {
+			// Update the user.
+			adminUpdateService.updateUser(targetUser);
+		}
+		
+		System.out.println(adminTravelerView.getAlertSuccessfulUpdate());
 		System.out.println(trailingNewLine);
 	}
 	
