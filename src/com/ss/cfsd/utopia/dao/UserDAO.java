@@ -20,6 +20,20 @@ public class UserDAO extends BaseDAO<User> {
 				new Object[] {user.getRoleId(), user.getGivenName(), user.getFamilyName(), user.getUsername(),
 						user.getEmail(), user.getPassword(), user.getPhone()});
 	}
+	
+	public void createUserWhereRoleIdEqualsTravelerId(User user) throws SQLException, ClassNotFoundException {
+		save("INSERT INTO user(role_id, given_name, family_name, username, email, password, phone)"
+				+ " VALUES((SELECT id FROM user_role WHERE name='Traveler'), ?, ?, ?, ?, ?, ?);",
+				new Object[] {user.getGivenName(), user.getFamilyName(), user.getUsername(),
+						user.getEmail(), user.getPassword(), user.getPhone()});
+	}
+	
+	public void createUserWhereRoleIdEqualsEmployeeId(User user) throws SQLException, ClassNotFoundException {
+		save("INSERT INTO user(role_id, given_name, family_name, username, email, password, phone)"
+				+ " VALUES((SELECT id FROM user_role WHERE name='Employee'), ?, ?, ?, ?, ?, ?);",
+				new Object[] {user.getGivenName(), user.getFamilyName(), user.getUsername(),
+						user.getEmail(), user.getPassword(), user.getPhone()});
+	}
 
 	// Read.
 	public List<User> readUser() throws SQLException, ClassNotFoundException {

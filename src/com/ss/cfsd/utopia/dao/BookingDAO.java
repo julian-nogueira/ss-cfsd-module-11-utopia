@@ -25,6 +25,10 @@ public class BookingDAO extends BaseDAO<Booking> {
 		return read("SELECT * FROM booking;", new Object[] {});
 	}
 	
+	public List<Booking> readBookingWhereIsActiveEqualsTrue() throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM booking WHERE is_active = 1;", new Object[] {});
+	}
+	
 	// Update.
 	public void updateBooking(Booking booking) throws SQLException, ClassNotFoundException {
 		save("UPDATE booking SET is_active = ?, confirmation_code = ? WHERE id = ?;",

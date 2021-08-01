@@ -19,6 +19,11 @@ public class RouteDAO extends BaseDAO<Route> {
 		save("INSERT INTO route(origin_id, destination_id) VALUES(?, ?);",
 				new Object[] {route.getOriginId(), route.getDestinationId()});
 	}
+	
+	public Integer createRouteReturnPrimaryKey(Route route) throws SQLException, ClassNotFoundException {
+		return saveReturnPrimaryKey("INSERT INTO route(origin_id, destination_id) VALUES(?, ?);",
+				new Object[] {route.getOriginId(), route.getDestinationId()});
+	}
 
 	// Read.
 	public List<Route> readRoute() throws SQLException, ClassNotFoundException {
@@ -27,6 +32,10 @@ public class RouteDAO extends BaseDAO<Route> {
 	
 	public List<Route> readRouteById(Integer id) throws SQLException, ClassNotFoundException {
 		return read("SELECT * FROM route WHERE id = ?;", new Object[] {id});
+	}
+	
+	public List<Route> readRouteByOriginIdAndDestinationId(String originId, String destinationId) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM route WHERE origin_id = ? AND destination_id = ?;", new Object[] {originId, destinationId});
 	}
 	
 	// Update.

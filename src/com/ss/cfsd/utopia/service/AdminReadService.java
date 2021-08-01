@@ -1,11 +1,13 @@
 package com.ss.cfsd.utopia.service;
 
 import com.ss.cfsd.utopia.dao.AirportDAO;
+import com.ss.cfsd.utopia.dao.BookingDAO;
 import com.ss.cfsd.utopia.dao.FlightDAO;
 import com.ss.cfsd.utopia.dao.PassengerDAO;
 import com.ss.cfsd.utopia.dao.RouteDAO;
 import com.ss.cfsd.utopia.dao.UserDAO;
 import com.ss.cfsd.utopia.domain.Airport;
+import com.ss.cfsd.utopia.domain.Booking;
 import com.ss.cfsd.utopia.domain.Flight;
 import com.ss.cfsd.utopia.domain.Passenger;
 import com.ss.cfsd.utopia.domain.Route;
@@ -80,6 +82,23 @@ public class AdminReadService {
 		}
 	}
 	
+	public List<Airport> readAirportWhereIataIdNotEqualsIataId(String iataId) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			AirportDAO airportDAO = new AirportDAO(conn);
+			List<Airport> airportList = airportDAO.readAirportWhereIataIdNotEqualsIataId(iataId);
+			return airportList;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
+	
 	public List<User> readTraveler() throws SQLException {
 		Connection conn = null;
 		try {
@@ -121,6 +140,23 @@ public class AdminReadService {
 			RouteDAO routeDAO = new RouteDAO(conn);
 			List<Route> routeList = routeDAO.readRouteById(id);
 			return routeList.get(0);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
+	
+	public List<Booking> readBookingWhereIsActiveEqualsTrue() throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			BookingDAO bookingDAO = new BookingDAO(conn);
+			List<Booking> bookingList = bookingDAO.readBookingWhereIsActiveEqualsTrue();
+			return bookingList;
 		} catch(Exception e) {
 			e.printStackTrace();
 			return null;
