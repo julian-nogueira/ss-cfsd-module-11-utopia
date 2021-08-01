@@ -5,6 +5,7 @@ import com.ss.cfsd.utopia.domain.Flight;
 import com.ss.cfsd.utopia.service.AdminCreateService;
 import com.ss.cfsd.utopia.service.AdminDeleteService;
 import com.ss.cfsd.utopia.service.AdminReadService;
+import com.ss.cfsd.utopia.service.AdminUpdateService;
 import com.ss.cfsd.utopia.view.AdminFlightView;
 
 import java.sql.SQLException;
@@ -20,12 +21,14 @@ public class AdminFlightMenu extends BaseMenu {
 	private AdminReadService adminReadService = null;
 	private AdminCreateService adminCreateService = null;
 	private AdminDeleteService adminDeleteService = null;
+	private AdminUpdateService adminUpdateService = null;
 
 	public AdminFlightMenu() {
 		adminFlightView = new AdminFlightView();
 		adminReadService = new AdminReadService();
 		adminCreateService = new AdminCreateService();
 		adminDeleteService = new AdminDeleteService();
+		adminUpdateService = new AdminUpdateService();
 	}
 	
 	public void runAdminFlightMenu() {
@@ -42,7 +45,7 @@ public class AdminFlightMenu extends BaseMenu {
 				} else if(adminFlightView.getOptionAdd().equals(option)) {
 					runAdminCreateFlight();
 				} else if(adminFlightView.getOptionUpdate().equals(option)) {
-					//
+					runAdminUpdateFlight();
 				} else if(adminFlightView.getOptionDelete().equals(option)) {
 					runAdminDeleteFlight();
 				} else if(adminFlightView.getOptionRead().equals(option)) {
@@ -111,6 +114,64 @@ public class AdminFlightMenu extends BaseMenu {
 		System.out.println(trailingNewLine);
 	}
 	
+	public void runAdminUpdateFlight() throws SQLException {
+		Flight targetFlight = null;
+		LocalTime departureTime = null;
+		Float seatPrice = null;
+		StringBuilder spacing = new StringBuilder("  ");
+		Integer optionNumber = null;
+		List<Flight> flightList = adminReadService.readFlight();
+		String[] flightOptions = new String[flightList.size() + 1];
+		
+		System.out.println(adminFlightView.getHeaderUpdateFlight());
+	
+		// Get the flight options.
+		for(int i = 0; i < flightList.size(); i++) {
+			if(i % 9 == 0) { spacing.append(" "); }
+			Flight flight = flightList.get(i);
+			StringBuilder flightOption = new StringBuilder();
+			flightOption.append("Origin: " + flight.getRoute().getOriginId());
+			flightOption.append("\n" + spacing + "Destination: " + flight.getRoute().getDestinationId());
+			flightOption.append("\n" + spacing + "Departure Date: " + flight.getDepartureTime().toLocalDateTime().toLocalDate());
+			flightOption.append("\n" + spacing + "Departure Time: " + flight.getDepartureTime().toLocalDateTime().toLocalTime());
+			flightOption.append("\n" + spacing + "Seat Price: $" + flight.getSeatPrice());
+			flightOption.append("\n");
+			flightOptions[i] = flightOption.toString();
+		}
+		flightOptions[flightList.size()] = adminFlightView.getOptionReturn();
+		
+		optionNumber = runMenu(adminFlightView.getPromptSelectFlightToUpdate(), flightOptions, Boolean.FALSE);
+		if(adminFlightView.getOptionReturn().equals(flightOptions[optionNumber])) {
+			System.out.println(trailingNewLine);
+			return;
+		}
+		targetFlight = flightList.get(optionNumber);
+		
+		// Prompt the user for pertinent information.
+		departureTime = getTimeOrNA("", adminFlightView.getPromptEnterDepartureTimeOrNA(), Boolean.FALSE);
+		seatPrice = getFloatOrNA("", adminFlightView.getPromptEnterSeatPriceOrNA(), Boolean.FALSE);
+		
+		if(departureTime != null) {
+			LocalDate localDate = targetFlight.getDepartureTime().toLocalDateTime().toLocalDate();
+			LocalTime localTime = departureTime;
+			LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+			targetFlight.setDepartureTime(Timestamp.valueOf(localDateTime));
+		}
+		
+		if(seatPrice != null) { targetFlight.setSeatPrice(seatPrice); }
+		
+		if(departureTime == null && seatPrice == null) {
+			System.out.println(trailingNewLine);
+			return;
+		} else {
+			// Update the flight.
+			adminUpdateService.updateFlight(targetFlight);
+		}
+		
+		System.out.println(adminFlightView.getAlertSuccessfulUpdate());
+		System.out.println(trailingNewLine);
+	}
+	
 	public void runAdminDeleteFlight() throws SQLException {
 		Flight targetFlight = null;
 		StringBuilder spacing = new StringBuilder("  ");
@@ -127,7 +188,8 @@ public class AdminFlightMenu extends BaseMenu {
 			StringBuilder flightOption = new StringBuilder();
 			flightOption.append("Origin: " + flight.getRoute().getOriginId());
 			flightOption.append("\n" + spacing + "Destination: " + flight.getRoute().getDestinationId());
-			flightOption.append("\n" + spacing + "Departure Time: " + flight.getDepartureTime().toLocalDateTime().toLocalDate());
+			flightOption.append("\n" + spacing + "Departure Date: " + flight.getDepartureTime().toLocalDateTime().toLocalDate());
+			flightOption.append("\n" + spacing + "Departure Time: " + flight.getDepartureTime().toLocalDateTime().toLocalTime());
 			flightOption.append("\n" + spacing + "Seat Price: $" + flight.getSeatPrice());
 			flightOption.append("\n");
 			flightOptions[i] = flightOption.toString();
@@ -159,7 +221,8 @@ public class AdminFlightMenu extends BaseMenu {
 			Flight flight = flightList.get(i);
 			System.out.println((i + 1) + ") Origin: " + flight.getRoute().getOriginId());
 			System.out.println(spacing + "Destination: " + flight.getRoute().getDestinationId());
-			System.out.println(spacing + "Departure Time: " + flight.getDepartureTime().toLocalDateTime().toLocalDate());
+			System.out.println(spacing + "Departure Date: " + flight.getDepartureTime().toLocalDateTime().toLocalDate());
+			System.out.println(spacing + "Departure Time: " + flight.getDepartureTime().toLocalDateTime().toLocalTime());
 			System.out.println(spacing + "Seat Price: $" + flight.getSeatPrice());
 			System.out.println();
 		}

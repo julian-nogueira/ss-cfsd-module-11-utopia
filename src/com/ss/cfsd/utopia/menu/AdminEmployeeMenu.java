@@ -2,6 +2,7 @@ package com.ss.cfsd.utopia.menu;
 
 import com.ss.cfsd.utopia.domain.User;
 import com.ss.cfsd.utopia.service.AdminCreateService;
+import com.ss.cfsd.utopia.service.AdminDeleteService;
 import com.ss.cfsd.utopia.service.AdminReadService;
 import com.ss.cfsd.utopia.view.AdminEmployeeView;
 
@@ -12,11 +13,13 @@ public class AdminEmployeeMenu extends BaseMenu {
 
 	private AdminEmployeeView adminEmployeeView = null;
 	private AdminCreateService adminCreateService = null;
+	private AdminDeleteService adminDeleteService = null;
 	private AdminReadService adminReadService = null;
 	
 	public AdminEmployeeMenu() {
 		adminEmployeeView = new AdminEmployeeView();
 		adminCreateService = new AdminCreateService();
+		adminDeleteService = new AdminDeleteService();
 		adminReadService = new AdminReadService();
 	}
 	
@@ -36,7 +39,7 @@ public class AdminEmployeeMenu extends BaseMenu {
 				} else if(adminEmployeeView.getOptionUpdate().equals(option)) {
 					//
 				} else if(adminEmployeeView.getOptionDelete().equals(option)) {
-					//
+					runAdminDeleteEmployee();
 				} else if(adminEmployeeView.getOptionRead().equals(option)) {
 					runAdminReadEmployee();
 				}
@@ -78,6 +81,42 @@ public class AdminEmployeeMenu extends BaseMenu {
 		adminCreateService.createUserWhereRoleIdEqualsEmployeeId(user);
 		
 		System.out.println(adminEmployeeView.getAlertSuccessfulCreate());
+		System.out.println(trailingNewLine);
+	}
+	
+	public void runAdminDeleteEmployee() throws SQLException {
+		User targetUser = null;
+		StringBuilder spacing = new StringBuilder("  ");
+		Integer optionNumber = null;
+		List<User> userList = adminReadService.readEmployee();
+		String[] userOptions = new String[userList.size() + 1];
+		
+		System.out.println(adminEmployeeView.getHeaderDeleteEmployee());
+	
+		// Get the employee options.
+		for(int i = 0; i < userList.size(); i++) {
+			if(i % 9 == 0) { spacing.append(" "); }
+			User user = userList.get(i);
+			StringBuilder userOption = new StringBuilder();
+			userOption.append("Given Name: " + user.getGivenName());
+			userOption.append("\n" + spacing + "Family Name: " + user.getFamilyName());
+			userOption.append("\n" + spacing + "Username: " + user.getUsername());
+			userOption.append("\n");
+			userOptions[i] = userOption.toString();
+		}
+		userOptions[userList.size()] = adminEmployeeView.getOptionReturn();
+		
+		optionNumber = runMenu(adminEmployeeView.getPromptSelectEmployeeToDelete(), userOptions, Boolean.FALSE);
+		if(adminEmployeeView.getOptionReturn().equals(userOptions[optionNumber])) {
+			System.out.println(trailingNewLine);
+			return;
+		}
+		targetUser = userList.get(optionNumber);
+	
+		// Delete the employee.
+		adminDeleteService.deleteUser(targetUser);
+		
+		System.out.println(adminEmployeeView.getAlertSuccessfulDelete());
 		System.out.println(trailingNewLine);
 	}
 	

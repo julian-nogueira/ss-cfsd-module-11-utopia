@@ -5,6 +5,7 @@ import com.ss.cfsd.utopia.domain.Passenger;
 import com.ss.cfsd.utopia.service.AdminCreateService;
 import com.ss.cfsd.utopia.service.AdminDeleteService;
 import com.ss.cfsd.utopia.service.AdminReadService;
+import com.ss.cfsd.utopia.service.AdminUpdateService;
 import com.ss.cfsd.utopia.view.AdminPassengerView;
 
 import java.sql.Date;
@@ -15,15 +16,17 @@ import java.util.List;
 public class AdminPassengerMenu extends BaseMenu {
 
 	private AdminPassengerView adminPassengerView = null;
+	private AdminReadService adminReadService = null;
 	private AdminCreateService adminCreateService = null;
 	private AdminDeleteService adminDeleteService = null;
-	private AdminReadService adminReadService = null;
+	private AdminUpdateService adminUpdateService = null;
 	
 	public AdminPassengerMenu() {
 		adminPassengerView = new AdminPassengerView();
+		adminReadService = new AdminReadService();
 		adminCreateService = new AdminCreateService();
 		adminDeleteService = new AdminDeleteService();
-		adminReadService = new AdminReadService();
+		adminUpdateService = new AdminUpdateService();
 	}
 	
 	public void runAdminPassengerMenu() {
@@ -40,7 +43,7 @@ public class AdminPassengerMenu extends BaseMenu {
 				} else if(adminPassengerView.getOptionAdd().equals(option)) {
 					runAdminCreatePassenger();
 				} else if(adminPassengerView.getOptionUpdate().equals(option)) {
-					//
+					runAdminUpdatePassenger();
 				} else if(adminPassengerView.getOptionDelete().equals(option)) {
 					runAdminDeletePassenger();
 				} else if(adminPassengerView.getOptionRead().equals(option)) {
@@ -103,6 +106,67 @@ public class AdminPassengerMenu extends BaseMenu {
 		adminCreateService.createPassenger(passenger);
 		
 		System.out.println(adminPassengerView.getAlertSuccessfulCreate());
+		System.out.println(trailingNewLine);
+	}
+	
+	public void runAdminUpdatePassenger() throws SQLException {
+		Passenger targetPassenger = null;
+		StringBuilder spacing = new StringBuilder("  ");
+		String givenName = null;
+		String familyName = null;
+		LocalDate dateOfBirth = null;
+		String gender = null;
+		String address = null;
+		Integer optionNumber = null;
+		List<Passenger> passengerList = adminReadService.readPassenger();
+		String[] passengerOptions = new String[passengerList.size() + 1];
+		
+		System.out.println(adminPassengerView.getHeaderUpdatePassenger());
+	
+		// Get the passenger options.
+		for(int i = 0; i < passengerList.size(); i++) {
+			if(i % 9 == 0) { spacing.append(" "); }
+			Passenger passenger = passengerList.get(i);
+			StringBuilder passengerOption = new StringBuilder();
+			passengerOption.append("Given Name: " + passenger.getGivenName());
+			passengerOption.append("\n" + spacing + "Family Name: " + passenger.getFamilyName());
+			passengerOption.append("\n" + spacing + "Date of Birth: " + passenger.getDob());
+			passengerOption.append("\n" + spacing + "Gender: " + passenger.getGender());
+			passengerOption.append("\n" + spacing + "Address: " + passenger.getAddress());
+			passengerOption.append("\n");
+			passengerOptions[i] = passengerOption.toString();
+		}
+		passengerOptions[passengerList.size()] = adminPassengerView.getOptionReturn();
+		
+		optionNumber = runMenu(adminPassengerView.getPromptSelectPassengerToUpdate(), passengerOptions, Boolean.FALSE);
+		if(adminPassengerView.getOptionReturn().equals(passengerOptions[optionNumber])) {
+			System.out.println(trailingNewLine);
+			return;
+		}
+		targetPassenger = passengerList.get(optionNumber);
+		
+		// Prompt the user for pertinent information.
+		givenName = getDataOrNA("", adminPassengerView.getPromptEnterGivenNameOrNA());
+		familyName = getDataOrNA("", adminPassengerView.getPromptEnterFamilyNameOrNA());
+		dateOfBirth = getDateOrNA("", adminPassengerView.getPromptEnterDateOfBirthOrNA(), Boolean.FALSE);
+		gender = getDataOrNA("", adminPassengerView.getPromptEnterGenderOrNA());
+		address = getDataOrNA("", adminPassengerView.getPromptEnterAddressOrNA());
+		
+		if(givenName != null) { targetPassenger.setGivenName(givenName); }
+		if(familyName != null) { targetPassenger.setFamilyName(familyName); }
+		if(dateOfBirth != null) { targetPassenger.setDob(Date.valueOf(dateOfBirth)); }
+		if(gender != null) { targetPassenger.setGender(gender); }
+		if(address != null) { targetPassenger.setAddress(address); }
+		
+		if(givenName == null && familyName == null && dateOfBirth == null && gender == null && address == null) {
+			System.out.println(trailingNewLine);
+			return;
+		} else {
+			// Update the passenger.
+			adminUpdateService.updatePassenger(targetPassenger);
+		}
+		
+		System.out.println(adminPassengerView.getAlertSuccessfulUpdate());
 		System.out.println(trailingNewLine);
 	}
 	

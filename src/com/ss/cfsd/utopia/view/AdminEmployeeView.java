@@ -11,7 +11,12 @@ public class AdminEmployeeView extends BaseView {
 	private String headerCreateEmployee = ""
 			+ "\n========== Administrator: Add Employee =============="
 			+ "\n";
+	private String headerDeleteEmployee = ""
+			+ "\n========== Administrator: Delete Employee ==========="
+			+ "\n";
 	
+	private String promptSelectEmployeeToDelete = ""
+			+ "Select the employee to be deleted:\n";
 	private String promptEnterGivenName = ""
 			+ "Enter the given name: ";
 	private String promptEnterFamilyName = ""
@@ -26,6 +31,7 @@ public class AdminEmployeeView extends BaseView {
 			+ "\nEnter the phone: ";
 	
 	private String alertSuccessfulCreate = "\nThe employee was successfully added.";
+	private String alertSuccessfulDelete = "\nThe traveler was successfully deleted.";
 	
 	private String[] headerMainOptions = {optionAdd, optionUpdate, optionDelete, optionRead, optionReturn};
 
@@ -41,6 +47,14 @@ public class AdminEmployeeView extends BaseView {
 		return headerCreateEmployee;
 	}
 
+	public String getHeaderDeleteEmployee() {
+		return headerDeleteEmployee;
+	}
+	
+	public String getPromptSelectEmployeeToDelete() {
+		return promptSelectEmployeeToDelete;
+	}
+	
 	public String getPromptEnterGivenName() {
 		return promptEnterGivenName;
 	}
@@ -67,6 +81,10 @@ public class AdminEmployeeView extends BaseView {
 	
 	public String getAlertSuccessfulCreate() {
 		return alertSuccessfulCreate;
+	}
+	
+	public String getAlertSuccessfulDelete() {
+		return alertSuccessfulDelete;
 	}
 
 	public String[] getHeaderMainOptions() {
