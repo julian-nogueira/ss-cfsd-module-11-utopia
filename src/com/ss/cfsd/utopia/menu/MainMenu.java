@@ -7,11 +7,13 @@ public class MainMenu extends BaseMenu {
 	private MainView mainView = null;
 	private EmployeeMenu employeeMenu = null;
 	private AdminMenu adminMenu = null;
+	private TravelerMenu travelerMenu = null;
 	
 	public MainMenu() {
 		mainView = new MainView();
 		employeeMenu = new EmployeeMenu();
 		adminMenu = new AdminMenu();
+		travelerMenu = new TravelerMenu();
 	}
 
 	public void runMainMenu() {
@@ -30,7 +32,7 @@ public class MainMenu extends BaseMenu {
 				} else if(mainView.getOptionAdmin().equals(option)) {
 					adminMenu.runAdminMenu();
 				} else if(mainView.getOptionTraveler().equals(option)) {
-					//
+					travelerMenu.runTravelerAuthenticate();
 				}
 			}
 		} catch(Exception e) {

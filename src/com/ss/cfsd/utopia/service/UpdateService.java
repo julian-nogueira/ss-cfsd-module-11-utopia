@@ -1,11 +1,15 @@
 package com.ss.cfsd.utopia.service;
 
 import com.ss.cfsd.utopia.dao.AirportDAO;
+import com.ss.cfsd.utopia.dao.BookingDAO;
+import com.ss.cfsd.utopia.dao.BookingPaymentDAO;
 import com.ss.cfsd.utopia.dao.FlightDAO;
 import com.ss.cfsd.utopia.dao.PassengerDAO;
 import com.ss.cfsd.utopia.dao.RouteDAO;
 import com.ss.cfsd.utopia.dao.UserDAO;
 import com.ss.cfsd.utopia.domain.Airport;
+import com.ss.cfsd.utopia.domain.Booking;
+import com.ss.cfsd.utopia.domain.BookingPayment;
 import com.ss.cfsd.utopia.domain.Flight;
 import com.ss.cfsd.utopia.domain.Passenger;
 import com.ss.cfsd.utopia.domain.Route;
@@ -70,6 +74,34 @@ public class UpdateService {
 			
 			flightDAO.updateFlight(flight);
 			conn.commit();
+		} catch(Exception e) {
+			e.printStackTrace();
+			conn.rollback();
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
+	
+	public void updateBookingCancellation(Booking booking) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			BookingDAO bookingDAO = new BookingDAO(conn);
+			BookingPaymentDAO bookingPaymentDAO = new BookingPaymentDAO(conn);
+		
+			// Update booking.
+			booking.setIsActive(Boolean.FALSE);
+			bookingDAO.updateBooking(booking);
+			
+			// Update booking payment.
+			BookingPayment bookingPayment = bookingPaymentDAO.readBookingPaymentByBookingId(booking.getId()).get(0);
+			bookingPayment.setRefunded(Boolean.TRUE);
+			bookingPaymentDAO.updateBookingPayment(bookingPayment);
+	
+			conn.commit();
+			return;
 		} catch(Exception e) {
 			e.printStackTrace();
 			conn.rollback();

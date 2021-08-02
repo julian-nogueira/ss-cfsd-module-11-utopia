@@ -25,6 +25,10 @@ public class BookingPaymentDAO extends BaseDAO<BookingPayment> {
 		return read("SELECT * FROM booking_payment;", new Object[] {});
 	}
 	
+	public List<BookingPayment> readBookingPaymentByBookingId(Integer bookingId) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM booking_payment WHERE booking_id = ?;", new Object[] {bookingId});
+	}
+	
 	// Update.
 	public void updateBookingPayment(BookingPayment bookingPayment) throws SQLException, ClassNotFoundException {
 		save("UPDATE booking_payment SET stripe_id = ?, refunded = ? WHERE booking_id = ?;",

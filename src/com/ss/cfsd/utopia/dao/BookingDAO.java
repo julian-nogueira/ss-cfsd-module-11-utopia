@@ -19,10 +19,22 @@ public class BookingDAO extends BaseDAO<Booking> {
 		save("INSERT INTO booking(is_active, confirmation_code) VALUES(?, ?);",
 				new Object[] {booking.getIsActive(), booking.getConfirmationCode()});
 	}
+	
+	public Integer createBookingReturnPrimaryKey(Booking booking) throws SQLException, ClassNotFoundException {
+		return saveReturnPrimaryKey("INSERT INTO booking(is_active, confirmation_code) VALUES(?, ?);",
+				new Object[] {booking.getIsActive(), booking.getConfirmationCode()});
+	}
 
 	// Read.
 	public List<Booking> readBooking() throws SQLException, ClassNotFoundException {
 		return read("SELECT * FROM booking;", new Object[] {});
+	}
+	
+	public List<Booking> readBookingByUserIdWhereIsActiveEqualsTrue(Integer userId) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM booking"
+				+ " JOIN booking_user ON booking_user.booking_id = booking.id"
+				+ " WHERE booking_user.user_id = ? AND is_active = 1;",
+				new Object[] {userId});
 	}
 	
 	public List<Booking> readBookingWhereIsActiveEqualsTrue() throws SQLException, ClassNotFoundException {

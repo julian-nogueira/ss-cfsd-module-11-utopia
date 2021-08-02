@@ -1,6 +1,7 @@
 package com.ss.cfsd.utopia.domain;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Flight {
 
@@ -11,6 +12,7 @@ public class Flight {
 	private Integer reservedSeats = null;
 	private Float seatPrice = null;
 	private Route route = null;
+	private List<FlightBookings> flightBookings = null;
 	
 	public Integer getId() {
 		return id;
@@ -38,6 +40,10 @@ public class Flight {
 	
 	public Route getRoute() {
 		return route;
+	}
+	
+	public List<FlightBookings> getFlightBookings() {
+		return flightBookings;
 	}
 
 	public void setId(Integer id) {
@@ -74,5 +80,9 @@ public class Flight {
 	
 	public void setRoute(Route route) {
 		this.route = route;
+	}
+	
+	public void setFlightBookings(List<FlightBookings> flightBookings) {
+		this.flightBookings= flightBookings;
 	}
 }

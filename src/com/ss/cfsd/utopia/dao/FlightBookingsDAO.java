@@ -25,6 +25,21 @@ public class FlightBookingsDAO extends BaseDAO<FlightBookings> {
 		return read("SELECT * FROM flight_bookings;", new Object[] {});
 	}
 	
+	public List<FlightBookings> readFlightBookingsByBookingId(Integer bookingId) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM flight_bookings"
+				+ " JOIN booking ON booking.id = flight_bookings.booking_id"
+				+ " WHERE booking_id = ?;",
+				new Object[] {bookingId});
+	}
+	
+	public List<FlightBookings> readFlightBookingsByUserIdAndFlightId(Integer userId, Integer flightId) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM flight_bookings"
+				+ " JOIN booking ON booking.id = flight_bookings.booking_id"
+				+ " JOIN booking_user ON booking_user.booking_id = booking.id"
+				+ " WHERE booking_user.user_id = ? AND flight_bookings.flight_id = ?;",
+				new Object[] {userId, flightId});
+	}
+	
 	// Update.
 	public void updateFlightBookings(FlightBookings flightBookings) throws SQLException, ClassNotFoundException {
 		save("UPDATE flight_bookings SET flight_id = ? WHERE booking_id = ?;",

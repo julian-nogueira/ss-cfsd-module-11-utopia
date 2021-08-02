@@ -1,12 +1,20 @@
 package com.ss.cfsd.utopia.service;
 
 import com.ss.cfsd.utopia.dao.AirportDAO;
+import com.ss.cfsd.utopia.dao.BookingDAO;
+import com.ss.cfsd.utopia.dao.BookingPaymentDAO;
+import com.ss.cfsd.utopia.dao.BookingUserDAO;
+import com.ss.cfsd.utopia.dao.FlightBookingsDAO;
 import com.ss.cfsd.utopia.dao.FlightDAO;
 import com.ss.cfsd.utopia.dao.PassengerDAO;
 import com.ss.cfsd.utopia.dao.RouteDAO;
 import com.ss.cfsd.utopia.dao.UserDAO;
 import com.ss.cfsd.utopia.domain.Airport;
+import com.ss.cfsd.utopia.domain.Booking;
+import com.ss.cfsd.utopia.domain.BookingPayment;
+import com.ss.cfsd.utopia.domain.BookingUser;
 import com.ss.cfsd.utopia.domain.Flight;
+import com.ss.cfsd.utopia.domain.FlightBookings;
 import com.ss.cfsd.utopia.domain.Passenger;
 import com.ss.cfsd.utopia.domain.Route;
 import com.ss.cfsd.utopia.domain.User;
@@ -147,6 +155,54 @@ public class CreateService {
 			return;
 		} catch(Exception e) {
 			e.printStackTrace();
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
+	
+	public void createBookingFromTraveler(Flight flight, User traveler) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			BookingDAO bookingDAO = new BookingDAO(conn);
+			BookingPaymentDAO bookingPaymentDAO = new BookingPaymentDAO(conn);
+			BookingUserDAO bookingUserDAO = new BookingUserDAO(conn);
+			FlightBookingsDAO flightBookingsDAO = new FlightBookingsDAO(conn);
+			Integer bookingPrimaryKey = null;
+			
+			// Create booking.
+			Booking booking = new Booking();
+			booking.setIsActive(Boolean.TRUE);
+			booking.setConfirmationCode("generic confirmation code");
+			bookingPrimaryKey = bookingDAO.createBookingReturnPrimaryKey(booking);
+			booking.setId(bookingPrimaryKey);
+			
+			// Create booking payment.
+			BookingPayment bookingPayment = new BookingPayment();
+			bookingPayment.setBookingId(booking);
+			bookingPayment.setStripeId("generic stripe id");
+			bookingPayment.setRefunded(Boolean.FALSE);
+			bookingPaymentDAO.createBookingPayment(bookingPayment);
+			
+			// Create booking user.
+			BookingUser bookingUser = new BookingUser();
+			bookingUser.setBookingId(booking);
+			bookingUser.setUserId(traveler);
+			bookingUserDAO.createBookingUser(bookingUser);
+			
+			// Create flight bookings.
+			FlightBookings flightBookings = new FlightBookings();
+			flightBookings.setBookingId(booking);
+			flightBookings.setFlightId(flight);
+			flightBookingsDAO.createFlightBookings(flightBookings);
+			
+			conn.commit();
+			return;
+		} catch(Exception e) {
+			e.printStackTrace();
+			conn.rollback();
 		} finally {
 			if(conn != null) {
 				conn.close();

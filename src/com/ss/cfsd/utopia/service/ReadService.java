@@ -2,6 +2,7 @@ package com.ss.cfsd.utopia.service;
 
 import com.ss.cfsd.utopia.dao.AirportDAO;
 import com.ss.cfsd.utopia.dao.BookingDAO;
+import com.ss.cfsd.utopia.dao.FlightBookingsDAO;
 import com.ss.cfsd.utopia.dao.FlightDAO;
 import com.ss.cfsd.utopia.dao.PassengerDAO;
 import com.ss.cfsd.utopia.dao.RouteDAO;
@@ -9,6 +10,7 @@ import com.ss.cfsd.utopia.dao.UserDAO;
 import com.ss.cfsd.utopia.domain.Airport;
 import com.ss.cfsd.utopia.domain.Booking;
 import com.ss.cfsd.utopia.domain.Flight;
+import com.ss.cfsd.utopia.domain.FlightBookings;
 import com.ss.cfsd.utopia.domain.Passenger;
 import com.ss.cfsd.utopia.domain.Route;
 import com.ss.cfsd.utopia.domain.User;
@@ -35,6 +37,56 @@ public class ReadService {
 			// Add route to each flight.
 			for(Flight flight: flightList) {
 				flight.setRoute(readRouteById(flight.getRouteId()));
+			}
+			
+			return flightList;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
+	
+	public List<Flight> readFlightByBookingId(Booking booking) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			FlightDAO flightDAO = new FlightDAO(conn);
+			List<Flight> flightList = flightDAO.readFlightByBookingId(booking.getId());
+			
+			// Add route to each flight.
+			for(Flight flight: flightList) {
+				flight.setRoute(readRouteById(flight.getRouteId()));
+			}
+			
+			return flightList;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
+	
+	public List<Flight> readFlightByUserId(User user) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			FlightDAO flightDAO = new FlightDAO(conn);
+			FlightBookingsDAO flightBookingsDAO = new FlightBookingsDAO(conn);
+			List<Flight> flightList = flightDAO.readFlightByUserId(user.getId());
+			List<FlightBookings> flightBookings = null; 
+			
+			// Add route to each flight.
+			for(Flight flight: flightList) {
+				flightBookings = flightBookingsDAO.readFlightBookingsByUserIdAndFlightId(user.getId(), flight.getId());
+				flight.setRoute(readRouteById(flight.getRouteId()));
+				flight.setFlightBookings(flightBookings);
 			}
 			
 			return flightList;
@@ -157,6 +209,34 @@ public class ReadService {
 			RouteDAO routeDAO = new RouteDAO(conn);
 			List<Route> routeList = routeDAO.readRouteById(id);
 			return routeList.get(0);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
+	
+	public List<Booking> readBookingByTravelerIdWhereIsActiveEqualsTrue(User traveler) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			BookingDAO bookingDAO = new BookingDAO(conn);
+			FlightBookingsDAO flightBookingsDAO = new FlightBookingsDAO(conn);
+			List<FlightBookings> flightBookingsList = null;
+			
+			// Get bookings by user id.
+			List<Booking> bookingList = bookingDAO.readBookingByUserIdWhereIsActiveEqualsTrue(traveler.getId());
+		
+			// Add flight bookings to bookings.
+			for(Booking booking: bookingList) {
+				flightBookingsList = flightBookingsDAO.readFlightBookingsByBookingId(booking.getId());
+				booking.setFlightBookings(flightBookingsList);
+			}
+			
+			return bookingList;
 		} catch(Exception e) {
 			e.printStackTrace();
 			return null;

@@ -1,11 +1,14 @@
 package com.ss.cfsd.utopia.domain;
 
+import java.util.List;
+
 public class Booking {
 
 	private Integer id = null;
 	private Boolean isActive = null;
 	private String confirmationCode = null;
-	
+	private List<FlightBookings> flightBookings = null;
+
 	public Integer getId() {
 		return id;
 	}
@@ -18,6 +21,10 @@ public class Booking {
 		return confirmationCode;
 	}
 	
+	public List<FlightBookings> getFlightBookings() {
+		return flightBookings;
+	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -28,5 +35,9 @@ public class Booking {
 	
 	public void setConfirmationCode(String confirmationCode) {
 		this.confirmationCode = confirmationCode;
+	}
+	
+	public void setFlightBookings(List<FlightBookings> flightBookings) {
+		this.flightBookings = flightBookings;
 	}
 }
