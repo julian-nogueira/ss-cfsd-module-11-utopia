@@ -16,11 +16,11 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
 
-public class AdminCreateService {
+public class CreateService {
 
 	Util util = null;
 	
-	public AdminCreateService() {
+	public CreateService() {
 		util = new Util();
 	}
 

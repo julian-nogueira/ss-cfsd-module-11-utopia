@@ -25,6 +25,10 @@ public class AirportDAO extends BaseDAO<Airport> {
 		return read("SELECT * FROM airport;", new Object[] {});
 	}
 	
+	public List<Airport> readAirportByIataId(String iataId) throws SQLException, ClassNotFoundException {
+		return read("SELECT * FROM airport WHERE iata_id = ?;", new Object[] {iataId});
+	}
+	
 	public List<Airport> readAirportWhereIataIdNotEqualsIataId(String iataId) throws SQLException, ClassNotFoundException {
 		return read("SELECT * FROM airport WHERE iata_id != ?;", new Object[] {iataId});
 	}

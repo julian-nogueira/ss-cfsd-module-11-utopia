@@ -1,10 +1,10 @@
 package com.ss.cfsd.utopia.menu;
 
 import com.ss.cfsd.utopia.domain.User;
-import com.ss.cfsd.utopia.service.AdminCreateService;
-import com.ss.cfsd.utopia.service.AdminDeleteService;
-import com.ss.cfsd.utopia.service.AdminReadService;
-import com.ss.cfsd.utopia.service.AdminUpdateService;
+import com.ss.cfsd.utopia.service.CreateService;
+import com.ss.cfsd.utopia.service.DeleteService;
+import com.ss.cfsd.utopia.service.ReadService;
+import com.ss.cfsd.utopia.service.UpdateService;
 import com.ss.cfsd.utopia.view.AdminEmployeeView;
 
 import java.sql.SQLException;
@@ -13,17 +13,17 @@ import java.util.List;
 public class AdminEmployeeMenu extends BaseMenu {
 
 	private AdminEmployeeView adminEmployeeView = null;
-	private AdminCreateService adminCreateService = null;
-	private AdminReadService adminReadService = null;
-	private AdminUpdateService adminUpdateService = null;
-	private AdminDeleteService adminDeleteService = null;
+	private CreateService createService = null;
+	private ReadService readService = null;
+	private UpdateService updateService = null;
+	private DeleteService deleteService = null;
 	
 	public AdminEmployeeMenu() {
 		adminEmployeeView = new AdminEmployeeView();
-		adminCreateService = new AdminCreateService();
-		adminReadService = new AdminReadService();
-		adminUpdateService = new AdminUpdateService();
-		adminDeleteService = new AdminDeleteService();
+		createService = new CreateService();
+		readService = new ReadService();
+		updateService = new UpdateService();
+		deleteService = new DeleteService();
 	}
 	
 	public void runAdminEmployeeMenu() {
@@ -81,7 +81,7 @@ public class AdminEmployeeMenu extends BaseMenu {
 		user.setPhone(phone);
 		
 		// Create the employee.
-		adminCreateService.createUserWhereRoleIdEqualsEmployeeId(user);
+		createService.createUserWhereRoleIdEqualsEmployeeId(user);
 		
 		System.out.println(adminEmployeeView.getAlertSuccessfulCreate());
 		System.out.println(trailingNewLine);
@@ -97,7 +97,7 @@ public class AdminEmployeeMenu extends BaseMenu {
 		String password = null;
 		String phone = null;
 		Integer optionNumber = null;
-		List<User> userList = adminReadService.readEmployee();
+		List<User> userList = readService.readEmployee();
 		String[] userOptions = new String[userList.size() + 1];
 		
 		System.out.println(adminEmployeeView.getHeaderUpdateEmployee());
@@ -145,7 +145,7 @@ public class AdminEmployeeMenu extends BaseMenu {
 			return;
 		} else {
 			// Update the user.
-			adminUpdateService.updateUser(targetUser);
+			updateService.updateUser(targetUser);
 		}
 		
 		System.out.println(adminEmployeeView.getAlertSuccessfulUpdate());
@@ -156,7 +156,7 @@ public class AdminEmployeeMenu extends BaseMenu {
 		User targetUser = null;
 		StringBuilder spacing = new StringBuilder("  ");
 		Integer optionNumber = null;
-		List<User> userList = adminReadService.readEmployee();
+		List<User> userList = readService.readEmployee();
 		String[] userOptions = new String[userList.size() + 1];
 		
 		System.out.println(adminEmployeeView.getHeaderDeleteEmployee());
@@ -182,14 +182,14 @@ public class AdminEmployeeMenu extends BaseMenu {
 		targetUser = userList.get(optionNumber);
 	
 		// Delete the employee.
-		adminDeleteService.deleteUser(targetUser);
+		deleteService.deleteUser(targetUser);
 		
 		System.out.println(adminEmployeeView.getAlertSuccessfulDelete());
 		System.out.println(trailingNewLine);
 	}
 	
 	public void runAdminReadEmployee() throws SQLException {
-		List<User> userList = adminReadService.readEmployee();
+		List<User> userList = readService.readEmployee();
 		StringBuilder spacing = new StringBuilder("  ");
 		
 		System.out.println(adminEmployeeView.getHeaderReadEmployee());

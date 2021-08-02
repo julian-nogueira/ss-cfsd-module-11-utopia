@@ -17,11 +17,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AdminReadService {
+public class ReadService {
 
 	Util util = null;
 	
-	public AdminReadService() {
+	public ReadService() {
 		util = new Util();
 	}
 	
@@ -71,6 +71,23 @@ public class AdminReadService {
 			conn = util.getConnection();
 			AirportDAO airportDAO = new AirportDAO(conn);
 			List<Airport> airportList = airportDAO.readAirport();
+			return airportList;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if(conn != null) {
+				conn.close();
+			}
+		}
+	}
+	
+	public List<Airport> readAirportByIataId(String iataId) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = util.getConnection();
+			AirportDAO airportDAO = new AirportDAO(conn);
+			List<Airport> airportList = airportDAO.readAirportByIataId(iataId);
 			return airportList;
 		} catch(Exception e) {
 			e.printStackTrace();

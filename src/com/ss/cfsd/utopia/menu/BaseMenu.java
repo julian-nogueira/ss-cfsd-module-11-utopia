@@ -10,8 +10,10 @@ public class BaseMenu {
 	private String invalidMenuOption = "\nInvalid menu option.";
 	private String invalidInput = "\nInvalid input.";
 	
-	protected String trailingNewLine = "\n\n";
+	protected String promptQuit = "\nEnter quit at any prompt to cancel the operation.";
+	protected String optionQuit = "Quit";
 	protected String optionNA = "N/A";
+	protected String trailingNewLine = "\n\n";
 
 	public int runMenu(String header, String[] options, Boolean hasTrailingNewLine) {
 		Integer optionNumber = null;
@@ -269,6 +271,41 @@ public class BaseMenu {
 		return LocalDate.parse(input);
 	}
 	
+	public String getDateOrNAOrQuit(String header, String prompt, Boolean hasTrailingNewLine) {
+		Scanner scanner = new Scanner(System.in);
+		String input = null;
+		Boolean validDate = Boolean.FALSE;
+
+		// Display a header if one was passed.
+		if(!"".equals(header)) {
+			System.out.println(header);
+		}
+	
+		// Get input from the user.
+		while(!validDate) {
+			System.out.print(prompt);
+			input = scanner.nextLine();
+			
+			// Validate the input, such that it is a LocalDate.
+			try {
+				if(optionNA.equals(input.toUpperCase())) {
+					return optionNA;
+				} else if(optionQuit.toUpperCase().equals(input.toUpperCase())) {
+					return optionQuit;
+				}
+				LocalDate.parse(input);
+				validDate = Boolean.TRUE;
+				if(hasTrailingNewLine) {
+					System.out.println(trailingNewLine);
+				}
+			} catch(Exception e) {
+				System.out.println(invalidInput);
+			}
+		}
+		
+		return input;
+	}
+	
 	public LocalTime getTime(String header, String prompt, Boolean hasTrailingNewLine) {
 		Scanner scanner = new Scanner(System.in);
 		String input = null;
@@ -330,5 +367,40 @@ public class BaseMenu {
 		}
 
 		return LocalTime.parse(input);
+	}
+	
+	public String getTimeOrNAOrQuit(String header, String prompt, Boolean hasTrailingNewLine) {
+		Scanner scanner = new Scanner(System.in);
+		String input = null;
+		Boolean validTime = Boolean.FALSE;
+
+		// Display a header if one was passed.
+		if(!"".equals(header)) {
+			System.out.println(header);
+		}
+	
+		// Get input from the user.
+		while(!validTime) {
+			System.out.print(prompt);
+			input = scanner.nextLine();
+			
+			// Validate the input, such that it is a LocalTime.
+			try {
+				if(optionNA.equals(input.toUpperCase())) {
+					return optionNA;
+				} else if(optionQuit.toUpperCase().equals(input.toUpperCase())) {
+					return optionQuit;
+				}
+				LocalTime.parse(input);
+				validTime = Boolean.TRUE;
+				if(hasTrailingNewLine) {
+					System.out.println(trailingNewLine);
+				}
+			} catch(Exception e) {
+				System.out.println(invalidInput);
+			}
+		}
+
+		return input;
 	}
 }

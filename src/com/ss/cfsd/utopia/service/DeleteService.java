@@ -12,11 +12,11 @@ import com.ss.cfsd.utopia.domain.User;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class AdminDeleteService {
+public class DeleteService {
 
 	Util util = null;
 	
-	public AdminDeleteService() {
+	public DeleteService() {
 		util = new Util();
 	}
 	

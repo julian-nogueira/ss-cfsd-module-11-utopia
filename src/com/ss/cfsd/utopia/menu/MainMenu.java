@@ -5,10 +5,12 @@ import com.ss.cfsd.utopia.view.MainView;
 public class MainMenu extends BaseMenu {
 
 	private MainView mainView = null;
+	private EmployeeMenu employeeMenu = null;
 	private AdminMenu adminMenu = null;
 	
 	public MainMenu() {
 		mainView = new MainView();
+		employeeMenu = new EmployeeMenu();
 		adminMenu = new AdminMenu();
 	}
 
@@ -24,7 +26,7 @@ public class MainMenu extends BaseMenu {
 				if(mainView.getOptionQuit().equals(option)) {
 					return;
 				} else if(mainView.getOptionEmployee().equals(option)) {
-					//
+					employeeMenu.runEmployeeMenu();
 				} else if(mainView.getOptionAdmin().equals(option)) {
 					adminMenu.runAdminMenu();
 				} else if(mainView.getOptionTraveler().equals(option)) {

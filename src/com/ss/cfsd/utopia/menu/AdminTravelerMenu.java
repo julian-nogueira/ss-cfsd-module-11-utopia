@@ -1,10 +1,10 @@
 package com.ss.cfsd.utopia.menu;
 
 import com.ss.cfsd.utopia.domain.User;
-import com.ss.cfsd.utopia.service.AdminCreateService;
-import com.ss.cfsd.utopia.service.AdminDeleteService;
-import com.ss.cfsd.utopia.service.AdminReadService;
-import com.ss.cfsd.utopia.service.AdminUpdateService;
+import com.ss.cfsd.utopia.service.CreateService;
+import com.ss.cfsd.utopia.service.DeleteService;
+import com.ss.cfsd.utopia.service.ReadService;
+import com.ss.cfsd.utopia.service.UpdateService;
 import com.ss.cfsd.utopia.view.AdminTravelerView;
 
 import java.sql.SQLException;
@@ -13,17 +13,17 @@ import java.util.List;
 public class AdminTravelerMenu extends BaseMenu {
 
 	private AdminTravelerView adminTravelerView = null;
-	private AdminCreateService adminCreateService = null;
-	private AdminReadService adminReadService = null;
-	private AdminUpdateService adminUpdateService = null;
-	private AdminDeleteService adminDeleteService = null;
+	private CreateService createService = null;
+	private ReadService readService = null;
+	private UpdateService updateService = null;
+	private DeleteService deleteService = null;
 	
 	public AdminTravelerMenu() {
 		adminTravelerView = new AdminTravelerView();
-		adminCreateService = new AdminCreateService();
-		adminReadService = new AdminReadService();
-		adminUpdateService = new AdminUpdateService();
-		adminDeleteService = new AdminDeleteService();
+		createService = new CreateService();
+		readService = new ReadService();
+		updateService = new UpdateService();
+		deleteService = new DeleteService();
 	}
 	
 	public void runAdminTravelerMenu() {
@@ -81,7 +81,7 @@ public class AdminTravelerMenu extends BaseMenu {
 		user.setPhone(phone);
 		
 		// Create the traveler.
-		adminCreateService.createUserWhereRoleIdEqualsTravelerId(user);
+		createService.createUserWhereRoleIdEqualsTravelerId(user);
 		
 		System.out.println(adminTravelerView.getAlertSuccessfulCreate());
 		System.out.println(trailingNewLine);
@@ -97,7 +97,7 @@ public class AdminTravelerMenu extends BaseMenu {
 		String password = null;
 		String phone = null;
 		Integer optionNumber = null;
-		List<User> userList = adminReadService.readTraveler();
+		List<User> userList = readService.readTraveler();
 		String[] userOptions = new String[userList.size() + 1];
 		
 		System.out.println(adminTravelerView.getHeaderUpdateTraveler());
@@ -145,7 +145,7 @@ public class AdminTravelerMenu extends BaseMenu {
 			return;
 		} else {
 			// Update the user.
-			adminUpdateService.updateUser(targetUser);
+			updateService.updateUser(targetUser);
 		}
 		
 		System.out.println(adminTravelerView.getAlertSuccessfulUpdate());
@@ -156,7 +156,7 @@ public class AdminTravelerMenu extends BaseMenu {
 		User targetUser = null;
 		StringBuilder spacing = new StringBuilder("  ");
 		Integer optionNumber = null;
-		List<User> userList = adminReadService.readTraveler();
+		List<User> userList = readService.readTraveler();
 		String[] userOptions = new String[userList.size() + 1];
 		
 		System.out.println(adminTravelerView.getHeaderDeleteTraveler());
@@ -182,14 +182,14 @@ public class AdminTravelerMenu extends BaseMenu {
 		targetUser = userList.get(optionNumber);
 	
 		// Delete the passenger.
-		adminDeleteService.deleteUser(targetUser);
+		deleteService.deleteUser(targetUser);
 		
 		System.out.println(adminTravelerView.getAlertSuccessfulDelete());
 		System.out.println(trailingNewLine);
 	}
 	
 	public void runAdminReadTraveler() throws SQLException {
-		List<User> userList = adminReadService.readTraveler();
+		List<User> userList = readService.readTraveler();
 		StringBuilder spacing = new StringBuilder("  ");
 		
 		System.out.println(adminTravelerView.getHeaderReadTraveler());

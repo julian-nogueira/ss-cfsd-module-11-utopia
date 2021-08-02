@@ -2,10 +2,10 @@ package com.ss.cfsd.utopia.menu;
 
 import com.ss.cfsd.utopia.domain.Booking;
 import com.ss.cfsd.utopia.domain.Passenger;
-import com.ss.cfsd.utopia.service.AdminCreateService;
-import com.ss.cfsd.utopia.service.AdminDeleteService;
-import com.ss.cfsd.utopia.service.AdminReadService;
-import com.ss.cfsd.utopia.service.AdminUpdateService;
+import com.ss.cfsd.utopia.service.CreateService;
+import com.ss.cfsd.utopia.service.DeleteService;
+import com.ss.cfsd.utopia.service.ReadService;
+import com.ss.cfsd.utopia.service.UpdateService;
 import com.ss.cfsd.utopia.view.AdminPassengerView;
 
 import java.sql.Date;
@@ -16,17 +16,17 @@ import java.util.List;
 public class AdminPassengerMenu extends BaseMenu {
 
 	private AdminPassengerView adminPassengerView = null;
-	private AdminReadService adminReadService = null;
-	private AdminCreateService adminCreateService = null;
-	private AdminDeleteService adminDeleteService = null;
-	private AdminUpdateService adminUpdateService = null;
+	private CreateService createService = null;
+	private ReadService readService = null;
+	private UpdateService updateService = null;
+	private DeleteService deleteService = null;
 	
 	public AdminPassengerMenu() {
 		adminPassengerView = new AdminPassengerView();
-		adminReadService = new AdminReadService();
-		adminCreateService = new AdminCreateService();
-		adminDeleteService = new AdminDeleteService();
-		adminUpdateService = new AdminUpdateService();
+		createService = new CreateService();
+		readService = new ReadService();
+		updateService = new UpdateService();
+		deleteService = new DeleteService();
 	}
 	
 	public void runAdminPassengerMenu() {
@@ -68,7 +68,7 @@ public class AdminPassengerMenu extends BaseMenu {
 		String[] bookingOptions = null;
 	
 		// Get a list of active bookings.
-		bookingList = adminReadService.readBookingWhereIsActiveEqualsTrue();
+		bookingList = readService.readBookingWhereIsActiveEqualsTrue();
 		bookingOptions = new String[bookingList.size() + 1];
 		
 		for(int i = 0; i < bookingList.size(); i++) {
@@ -103,7 +103,7 @@ public class AdminPassengerMenu extends BaseMenu {
 		passenger.setAddress(address);
 		
 		// Create the passenger.
-		adminCreateService.createPassenger(passenger);
+		createService.createPassenger(passenger);
 		
 		System.out.println(adminPassengerView.getAlertSuccessfulCreate());
 		System.out.println(trailingNewLine);
@@ -118,7 +118,7 @@ public class AdminPassengerMenu extends BaseMenu {
 		String gender = null;
 		String address = null;
 		Integer optionNumber = null;
-		List<Passenger> passengerList = adminReadService.readPassenger();
+		List<Passenger> passengerList = readService.readPassenger();
 		String[] passengerOptions = new String[passengerList.size() + 1];
 		
 		System.out.println(adminPassengerView.getHeaderUpdatePassenger());
@@ -163,7 +163,7 @@ public class AdminPassengerMenu extends BaseMenu {
 			return;
 		} else {
 			// Update the passenger.
-			adminUpdateService.updatePassenger(targetPassenger);
+			updateService.updatePassenger(targetPassenger);
 		}
 		
 		System.out.println(adminPassengerView.getAlertSuccessfulUpdate());
@@ -174,7 +174,7 @@ public class AdminPassengerMenu extends BaseMenu {
 		Passenger targetPassenger = null;
 		StringBuilder spacing = new StringBuilder("  ");
 		Integer optionNumber = null;
-		List<Passenger> passengerList = adminReadService.readPassenger();
+		List<Passenger> passengerList = readService.readPassenger();
 		String[] passengerOptions = new String[passengerList.size() + 1];
 		
 		System.out.println(adminPassengerView.getHeaderDeletePassenger());
@@ -200,14 +200,14 @@ public class AdminPassengerMenu extends BaseMenu {
 		targetPassenger = passengerList.get(optionNumber);
 	
 		// Delete the passenger.
-		adminDeleteService.deletePassenger(targetPassenger);
+		deleteService.deletePassenger(targetPassenger);
 		
 		System.out.println(adminPassengerView.getAlertSuccessfulDelete());
 		System.out.println(trailingNewLine);
 	}
 	
 	public void runAdminReadPassenger() throws SQLException {
-		List<Passenger> passengerList = adminReadService.readPassenger();
+		List<Passenger> passengerList = readService.readPassenger();
 		StringBuilder spacing = new StringBuilder("  ");
 		
 		System.out.println(adminPassengerView.getHeaderReadPassenger());

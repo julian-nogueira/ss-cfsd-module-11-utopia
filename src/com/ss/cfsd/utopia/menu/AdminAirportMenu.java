@@ -1,10 +1,10 @@
 package com.ss.cfsd.utopia.menu;
 
 import com.ss.cfsd.utopia.domain.Airport;
-import com.ss.cfsd.utopia.service.AdminCreateService;
-import com.ss.cfsd.utopia.service.AdminDeleteService;
-import com.ss.cfsd.utopia.service.AdminReadService;
-import com.ss.cfsd.utopia.service.AdminUpdateService;
+import com.ss.cfsd.utopia.service.CreateService;
+import com.ss.cfsd.utopia.service.DeleteService;
+import com.ss.cfsd.utopia.service.ReadService;
+import com.ss.cfsd.utopia.service.UpdateService;
 import com.ss.cfsd.utopia.view.AdminAirportView;
 
 import java.sql.SQLException;
@@ -13,17 +13,17 @@ import java.util.List;
 public class AdminAirportMenu extends BaseMenu {
 
 	private AdminAirportView adminAirportView = null;
-	private AdminCreateService adminCreateService = null;
-	private AdminDeleteService adminDeleteService = null;
-	private AdminReadService adminReadService = null;
-	private AdminUpdateService adminUpdateService = null;
+	private CreateService createService = null;
+	private ReadService readService = null;
+	private UpdateService updateService = null;
+	private DeleteService deleteService = null;
 	
 	public AdminAirportMenu() {
 		adminAirportView = new AdminAirportView();
-		adminCreateService = new AdminCreateService();
-		adminDeleteService = new AdminDeleteService();
-		adminReadService = new AdminReadService();
-		adminUpdateService = new AdminUpdateService();
+		createService = new CreateService();
+		readService = new ReadService();
+		updateService = new UpdateService();
+		deleteService = new DeleteService();
 	}
 	
 	public void runAdminAirportMenu() {
@@ -69,7 +69,7 @@ public class AdminAirportMenu extends BaseMenu {
 		airport.setCity(city);
 		
 		// Create the airport.
-		adminCreateService.createAirport(airport);
+		createService.createAirport(airport);
 		
 		System.out.println(adminAirportView.getAlertSuccessfulCreate());
 		System.out.println(trailingNewLine);
@@ -79,7 +79,7 @@ public class AdminAirportMenu extends BaseMenu {
 		Airport targetAirport = null;
 		String city = null;
 		Integer optionNumber = null;
-		List<Airport> airportList = adminReadService.readAirport();
+		List<Airport> airportList = readService.readAirport();
 		String[] airportOptions = new String[airportList.size() + 1];
 		
 		System.out.println(adminAirportView.getHeaderUpdateAirport());
@@ -110,7 +110,7 @@ public class AdminAirportMenu extends BaseMenu {
 			return;
 		} else {
 			// Update the airport.
-			adminUpdateService.updateAirport(targetAirport);
+			updateService.updateAirport(targetAirport);
 		}
 		
 		System.out.println(adminAirportView.getAlertSuccessfulUpdate());
@@ -120,7 +120,7 @@ public class AdminAirportMenu extends BaseMenu {
 	public void runAdminDeleteAirport() throws SQLException {
 		Airport targetAirport = null;
 		Integer optionNumber = null;
-		List<Airport> airportList = adminReadService.readAirport();
+		List<Airport> airportList = readService.readAirport();
 		String[] airportOptions = new String[airportList.size() + 1];
 		
 		System.out.println(adminAirportView.getHeaderDeleteAirport());
@@ -142,14 +142,14 @@ public class AdminAirportMenu extends BaseMenu {
 		targetAirport = airportList.get(optionNumber);
 	
 		// Delete the airport.
-		adminDeleteService.deleteAirport(targetAirport);
+		deleteService.deleteAirport(targetAirport);
 		
 		System.out.println(adminAirportView.getAlertSuccessfulDelete());
 		System.out.println(trailingNewLine);
 	}
 	
 	public void runAdminReadAirport() throws SQLException {
-		List<Airport> airportList = adminReadService.readAirport();
+		List<Airport> airportList = readService.readAirport();
 		
 		System.out.println(adminAirportView.getHeaderReadAirport());
 		

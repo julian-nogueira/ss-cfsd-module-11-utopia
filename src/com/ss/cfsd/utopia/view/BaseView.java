@@ -4,6 +4,8 @@ public class BaseView {
 
 	protected String optionReturn = "-- Return to previous menu --";
 	protected String optionQuit = "-- Quit the program --";
+	protected String optionQuitOperation = "-- Quit --";
+	protected String optionNA = "-- N/A --";
 	protected String optionAdd = "Add";
 	protected String optionUpdate = "Update";
 	protected String optionDelete = "Delete";
@@ -18,6 +20,14 @@ public class BaseView {
 		return optionQuit;
 	}
 	
+	public String getOptionQuitOperation() {
+		return optionQuitOperation;
+	}
+	
+	public String getOptionNA() {
+		return optionNA;
+	}
+
 	public String getOptionAdd() {
 		return optionAdd;
 	}

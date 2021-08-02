@@ -2,10 +2,10 @@ package com.ss.cfsd.utopia.menu;
 
 import com.ss.cfsd.utopia.domain.Airport;
 import com.ss.cfsd.utopia.domain.Flight;
-import com.ss.cfsd.utopia.service.AdminCreateService;
-import com.ss.cfsd.utopia.service.AdminDeleteService;
-import com.ss.cfsd.utopia.service.AdminReadService;
-import com.ss.cfsd.utopia.service.AdminUpdateService;
+import com.ss.cfsd.utopia.service.CreateService;
+import com.ss.cfsd.utopia.service.DeleteService;
+import com.ss.cfsd.utopia.service.ReadService;
+import com.ss.cfsd.utopia.service.UpdateService;
 import com.ss.cfsd.utopia.view.AdminFlightView;
 
 import java.sql.SQLException;
@@ -18,17 +18,17 @@ import java.util.List;
 public class AdminFlightMenu extends BaseMenu {
 
 	private AdminFlightView adminFlightView = null;
-	private AdminReadService adminReadService = null;
-	private AdminCreateService adminCreateService = null;
-	private AdminDeleteService adminDeleteService = null;
-	private AdminUpdateService adminUpdateService = null;
+	private CreateService createService = null;
+	private ReadService readService = null;
+	private UpdateService updateService = null;
+	private DeleteService deleteService = null;
 
 	public AdminFlightMenu() {
 		adminFlightView = new AdminFlightView();
-		adminReadService = new AdminReadService();
-		adminCreateService = new AdminCreateService();
-		adminDeleteService = new AdminDeleteService();
-		adminUpdateService = new AdminUpdateService();
+		createService = new CreateService();
+		readService = new ReadService();
+		updateService = new UpdateService();
+		deleteService = new DeleteService();
 	}
 	
 	public void runAdminFlightMenu() {
@@ -68,7 +68,7 @@ public class AdminFlightMenu extends BaseMenu {
 		String[] originOptions = null;
 		String[] destinationOptions = null;
 		
-		airportList = adminReadService.readAirport();
+		airportList = readService.readAirport();
 		originOptions = new String[airportList.size() + 1];
 		
 		for(int i = 0; i < airportList.size(); i++) {
@@ -86,7 +86,7 @@ public class AdminFlightMenu extends BaseMenu {
 		}
 		originAirport = airportList.get(optionNumber);
 		
-		airportList = adminReadService.readAirportWhereIataIdNotEqualsIataId(originAirport.getIataId());
+		airportList = readService.readAirportWhereIataIdNotEqualsIataId(originAirport.getIataId());
 		destinationOptions = new String[airportList.size() + 1];
 		
 		for(int i = 0; i < airportList.size(); i++) {
@@ -108,7 +108,7 @@ public class AdminFlightMenu extends BaseMenu {
 		departureTimestamp = Timestamp.valueOf(LocalDateTime.of(departureDate, departureTime));
 		
 		// Create the flight.
-		adminCreateService.createFlight(originAirport, destinationAirport, departureTimestamp);
+		createService.createFlight(originAirport, destinationAirport, departureTimestamp);
 		
 		System.out.println(adminFlightView.getAlertSuccessfulCreate());
 		System.out.println(trailingNewLine);
@@ -120,7 +120,7 @@ public class AdminFlightMenu extends BaseMenu {
 		Float seatPrice = null;
 		StringBuilder spacing = new StringBuilder("  ");
 		Integer optionNumber = null;
-		List<Flight> flightList = adminReadService.readFlight();
+		List<Flight> flightList = readService.readFlight();
 		String[] flightOptions = new String[flightList.size() + 1];
 		
 		System.out.println(adminFlightView.getHeaderUpdateFlight());
@@ -165,7 +165,7 @@ public class AdminFlightMenu extends BaseMenu {
 			return;
 		} else {
 			// Update the flight.
-			adminUpdateService.updateFlight(targetFlight);
+			updateService.updateFlight(targetFlight);
 		}
 		
 		System.out.println(adminFlightView.getAlertSuccessfulUpdate());
@@ -176,7 +176,7 @@ public class AdminFlightMenu extends BaseMenu {
 		Flight targetFlight = null;
 		StringBuilder spacing = new StringBuilder("  ");
 		Integer optionNumber = null;
-		List<Flight> flightList = adminReadService.readFlight();
+		List<Flight> flightList = readService.readFlight();
 		String[] flightOptions = new String[flightList.size() + 1];
 		
 		System.out.println(adminFlightView.getHeaderDeleteFlight());
@@ -204,14 +204,14 @@ public class AdminFlightMenu extends BaseMenu {
 		targetFlight = flightList.get(optionNumber);
 	
 		// Delete the flight.
-		adminDeleteService.deleteFlight(targetFlight);
+		deleteService.deleteFlight(targetFlight);
 		
 		System.out.println(adminFlightView.getAlertSuccessfulDelete());
 		System.out.println(trailingNewLine);
 	}
 	
 	public void runAdminReadFlight() throws SQLException {
-		List<Flight> flightList = adminReadService.readFlight();
+		List<Flight> flightList = readService.readFlight();
 		StringBuilder spacing = new StringBuilder("  ");
 		
 		System.out.println(adminFlightView.getHeaderReadFlight());
